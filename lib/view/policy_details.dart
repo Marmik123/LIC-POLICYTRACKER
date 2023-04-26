@@ -298,7 +298,7 @@ class _PolicyDetailsState extends State<PolicyDetails> {
                         value:widget.policyItem['Agency'].toString()=='1'?
                             'Shailesh Shah':widget.policyItem['Agency'].toString()=='2'?'Chintan Shah':
                         widget.policyItem['Agency'].toString()=='3'?'Mansi Shah'
-                        :'*',
+                        :'Other Agency',
                         fieldStyle: valueTextStyle(),
                         // textAlign: TextAlign.center,
                       ),
@@ -336,7 +336,7 @@ valueTextStyle (){
   field({required BuildContext ctx,required String value,required TextStyle fieldStyle}){
     return Container(
       color: const Color(0xffFDE0D9),
-      padding: EdgeInsets.only(top:10),
+      padding: const EdgeInsets.only(top:10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,

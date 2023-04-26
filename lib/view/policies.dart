@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lic_policies_clone/controller/retrieve_data.dart';
 import 'package:lic_policies_clone/view/policy_details.dart';
+import 'package:lic_policies_clone/view/sb__policy_view.dart';
 
 class Policies extends StatefulWidget {
   const Policies({Key? key}) : super(key: key);
@@ -15,6 +16,7 @@ class _PoliciesState extends State<Policies> {
   bool isLoading =false;
   bool policyNoChecked =false;
   bool groupNameChecked =false;
+  bool isSBPressed=false;
   bool policyHolderChecked =false;
 
   TextEditingController policyNo=TextEditingController();
@@ -36,6 +38,35 @@ class _PoliciesState extends State<Policies> {
       appBar: AppBar(
         leadingWidth: 130,
         actions: [
+          IconButton(
+            tooltip: "WILL OPEN SB POLICIES",
+            onPressed: (){
+              setState(() {
+                isSBPressed=true;
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context)=>SBView()),
+                );
+              });
+
+            }, icon: Container(
+              height: 22,
+              width: 22,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+               border: Border.all(color: Color(0xffFDE0D9),width: 2)
+              ),
+              child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text('SB',
+                    style: TextStyle(
+                         fontSize:10,
+                        color: Color(0xffFDE0D9),
+                        decoration: TextDecoration.none,
+                        fontWeight: FontWeight.bold
+                    ),
+                  ))),
+          ),
           isSearchPressed?AnimatedContainer(
             curve: Curves.fastOutSlowIn,
             duration: const Duration(seconds: 10),
@@ -48,7 +79,8 @@ class _PoliciesState extends State<Policies> {
             width: MediaQuery.of(context).size.width/2,
             child:  TextFormField(
               controller: policyNoChecked?policyNo:groupNameChecked?groupName:policyHolderName,
-              onFieldSubmitted:(_)=> search(policyNoChecked?policyNo.text:groupNameChecked?groupName.text:policyHolderName.text,context),
+              onFieldSubmitted:(_)=> search(
+                  searchArg: policyNoChecked?policyNo.text:groupNameChecked?groupName.text:policyHolderName.text,ctx: context,isSBPolicy: isSBPressed),
               cursorColor: Colors.blueGrey,
               keyboardType: selectedOption==Option.policyNo?TextInputType.number:TextInputType.text,
               style: const TextStyle(
@@ -57,7 +89,7 @@ class _PoliciesState extends State<Policies> {
               decoration: InputDecoration(
                   isDense: true,
                   border: InputBorder.none,
-                  suffixIconConstraints: BoxConstraints(
+                  suffixIconConstraints: const BoxConstraints(
                       maxHeight: 35,
                       maxWidth: 35
                   ),
@@ -260,7 +292,7 @@ class _PoliciesState extends State<Policies> {
     );
   }
 
-  search(String searchArg,BuildContext ctx){
+  search({required String searchArg,required BuildContext ctx,bool? isSBPolicy}){
     setState(() {
       isLoading=true;
       if(searchArg.isEmpty){
@@ -272,13 +304,14 @@ class _PoliciesState extends State<Policies> {
           ),
         );
       } else {
-        DbConfiguration().searchPolicy(searchArg: searchArg,option: selectedOption??Option.policyHolderName).then((data) {
+          DbConfiguration().searchPolicy(searchArg: searchArg,option: selectedOption??Option.policyHolderName).then((data) {
           setState(() {
             _searchedData=data;
             searchedData=List.from(_searchedData);
             isLoading=false;
           });
         });
+
       }
 
     });
@@ -296,7 +329,7 @@ class _PoliciesState extends State<Policies> {
   }
 
   getDataOnRefresh(){
-    DbConfiguration().getData().then((data) {
+      DbConfiguration().getData().then((data) {
       setState(() {
         isSearchPressed=false;
         _data = data;
@@ -304,10 +337,26 @@ class _PoliciesState extends State<Policies> {
       });
     },
     );
+
+  }
+
+  getSBData(){
+    DbConfiguration().getSBData().then((data) {
+      setState(() {
+        isSearchPressed=false;
+        _data = data;
+        print(_data);/**/
+      });
+    },
+    );
+
   }
 
 
 }
+
+
+//DIALOG WIDGET CODE
 class Dialog extends StatefulWidget {
   bool policyNoChecked;
    bool groupNameChecked;

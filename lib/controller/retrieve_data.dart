@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lic_policies_clone/view/policies.dart';
+import 'package:lic_policies_clone/view/sb__policy_view.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 final String table = 'Policies';
+final String sb_p_table = 'SBPolicies';
 final String columnName = 'MembName';
 var dbContent;
 late final String dbPath;
@@ -34,6 +36,13 @@ class DbConfiguration {
     print(results);
     return await db.query(table);
   }
+  Future<List<Map<String, dynamic>>> getSBData() async {
+    print("getSBData called");
+    query = 'SELECT * FROM ${sb_p_table}';
+    final results = await db.rawQuery(query);
+    print(results);
+    return await results;
+  }
 
 
 
@@ -55,7 +64,27 @@ class DbConfiguration {
 
   }
 
-  /*Future<List<Map<String, dynamic>>> searchByPolicyHolderName(
+
+  Future<List<Map<String, dynamic>>> searchSBPolicy(
+      {required String searchArg,required sBOption sb}) async {
+    print("SEARCH_POLICY called");
+    print("##@#@#@###@@@@#####@");
+    print(sBOption);
+    if(sb==sBOption.policyNo){
+      query = 'SELECT * FROM ${sb_p_table} WHERE PolicyNo LIKE ?';
+    }else if (sb==sBOption.groupName){
+      query = 'SELECT * FROM ${sb_p_table} WHERE GroupName LIKE ?';
+    }else  query = 'SELECT * FROM ${sb_p_table} WHERE MembName LIKE ?';
+
+    final args = ['%$searchArg%'];
+    final results = await db.rawQuery(query, args);
+    print(results);
+    return results;
+
+  }
+
+
+/*Future<List<Map<String, dynamic>>> searchByPolicyHolderName(
       {required String searchArg}) async {
     print("POLICY HOLDER called");
     print("##@#@#@###@@@@#####@");
