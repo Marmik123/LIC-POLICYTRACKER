@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lic_policies_clone/controller/retrieve_data.dart';
 import 'package:lic_policies_clone/view/policy_details.dart';
 import 'package:lic_policies_clone/view/sb__policy_view.dart';
-
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 class Policies extends StatefulWidget {
   const Policies({Key? key}) : super(key: key);
 
@@ -30,16 +30,17 @@ class _PoliciesState extends State<Policies> {
   void initState() {
     super.initState();
     initializeDb();
+
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leadingWidth: 130,
+        // leadingWidth: 130,
         actions: [
-          IconButton(
-            tooltip: "WILL OPEN SB POLICIES",
+          TextButton(
+
             onPressed: (){
               setState(() {
                 isSBPressed=true;
@@ -49,13 +50,19 @@ class _PoliciesState extends State<Policies> {
                 );
               });
 
-            }, icon: Container(
+            },
+            style: ButtonStyle(
+              padding: MaterialStateProperty.all(EdgeInsets.zero),
+
+            ),
+            child: Container(
               height: 22,
               width: 22,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                border: Border.all(color: Color(0xffFDE0D9),width: 2)
               ),
+
               child: FittedBox(
                   fit: BoxFit.scaleDown,
                   child: Text('SB',
@@ -82,6 +89,8 @@ class _PoliciesState extends State<Policies> {
               onFieldSubmitted:(_)=> search(
                   searchArg: policyNoChecked?policyNo.text:groupNameChecked?groupName.text:policyHolderName.text,ctx: context,isSBPolicy: isSBPressed),
               cursorColor: Colors.blueGrey,
+              textInputAction:TextInputAction.search,
+
               keyboardType: selectedOption==Option.policyNo?TextInputType.number:TextInputType.text,
               style: const TextStyle(
                 color: Colors.blueGrey,
@@ -143,6 +152,10 @@ class _PoliciesState extends State<Policies> {
                   },
                 );              });
             },
+            style: ButtonStyle(
+              padding: MaterialStateProperty.all(EdgeInsets.zero),
+
+            ),
             child: const Icon(Icons.arrow_drop_down_circle_outlined,color: Color(0xffFDE0D9)),
           ),
           TextButton(
@@ -151,20 +164,23 @@ class _PoliciesState extends State<Policies> {
               isSearchPressed=!isSearchPressed;
             });
 
-          }, child: const Icon(Icons.search,color: Color(0xffFDE0D9),))],
+          },
+              style: ButtonStyle(
+                               padding: MaterialStateProperty.all(EdgeInsets.zero),
+
+          ),
+              child: const Icon(Icons.search,color: Color(0xffFDE0D9),))],
         backgroundColor: Colors.blueGrey,
-        leading: const Center(
-          child: FittedBox(
-            fit: BoxFit.contain,
-            child: Text('Policies',
-              style: TextStyle(
-                  fontSize: 25,
-                  color: Color(0xffFDE0D9),
-                  decoration: TextDecoration.none,
-                  fontWeight: FontWeight.bold
-              ),
-              // textAlign: TextAlign.center,
+        title: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text('Policies',
+            style: TextStyle(
+                fontSize: 25,
+                color: Color(0xffFDE0D9),
+                decoration: TextDecoration.none,
+                fontWeight: FontWeight.bold
             ),
+            // textAlign: TextAlign.center,
           ),
         ),
 
@@ -203,6 +219,7 @@ class _PoliciesState extends State<Policies> {
               ),
               physics: const ClampingScrollPhysics(),
               itemBuilder: (context,index){
+                var sr_no=index+1;
                 final item = isSearchPressed?searchedData[index]: _data[index];
                 return
                   Container(
@@ -215,6 +232,21 @@ class _PoliciesState extends State<Policies> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Container(
+                            margin: EdgeInsets.only(left: 10,bottom: 5),
+                            decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                shape: BoxShape.circle,
+                                border: Border.all(color: Colors.blueGrey)
+                            ),
+                            height: 20,
+                            width: 20,
+                            child: Center(child: FittedBox(fit:BoxFit.scaleDown,child:  Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: Text(sr_no.toString(),),
+                            ),),),
+                            alignment: Alignment.centerRight,
+                          ),
                           ListTile(
                             trailing: RichText(text:
                             TextSpan(children: [
@@ -326,12 +358,13 @@ class _PoliciesState extends State<Policies> {
   Future<void> initializeDb () async{
     await DbConfiguration().initializeDatabase();
     getDataOnRefresh();
+    FlutterNativeSplash.remove();
   }
 
-  getDataOnRefresh(){
+  getDataOnRefresh() {
       DbConfiguration().getData().then((data) {
       setState(() {
-        isSearchPressed=false;
+        isSearchPressed = false;
         _data = data;
         print(_data);/**/
       });

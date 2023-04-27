@@ -32,13 +32,14 @@ class DbConfiguration {
   }
   Future<List<Map<String, dynamic>>> getData() async {
     print("getData called");
-    final results = await db.query(table);
+    query = 'SELECT * FROM ${table} INNER JOIN Clients on Clients.Memb_ID=$table.MembID';
+    final results = await db.rawQuery(query);
     print(results);
-    return await db.query(table);
+    return await results;
   }
   Future<List<Map<String, dynamic>>> getSBData() async {
     print("getSBData called");
-    query = 'SELECT * FROM ${sb_p_table}';
+    query = 'SELECT * FROM ${sb_p_table} INNER JOIN Clients on Clients.Memb_ID=${sb_p_table}.MembID';
     final results = await db.rawQuery(query);
     print(results);
     return await results;

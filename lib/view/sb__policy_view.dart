@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lic_policies_clone/controller/retrieve_data.dart';
+import 'package:lic_policies_clone/view/sb_policy_details.dart';
 
 import 'policy_details.dart';
 
@@ -37,8 +38,22 @@ class _SBViewState extends State<SBView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leadingWidth: 130,
+        // leadingWidth: 130,
+        titleSpacing: 0,
+        title: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text('SB Policies',
+            style: TextStyle(
+                fontSize: 25,
+                color: Color(0xffFDE0D9),
+                decoration: TextDecoration.none,
+                fontWeight: FontWeight.bold
+            ),
+            // textAlign: TextAlign.center,
+          ),
+        ),
         actions: [
+
           isSearchPressed?AnimatedContainer(
             curve: Curves.fastOutSlowIn,
             duration: const Duration(seconds: 10),
@@ -50,16 +65,19 @@ class _SBViewState extends State<SBView> {
             height: 15,
             width: MediaQuery.of(context).size.width/2,
             child:  TextFormField(
+
               controller: policyNoChecked?policyNo:groupNameChecked?groupName:policyHolderName,
               onFieldSubmitted:(_)=> search(
                   searchArg: policyNoChecked?policyNo.text:groupNameChecked?groupName.text:policyHolderName.text,ctx: context,isSBPolicy: isSBPressed),
               cursorColor: Colors.blueGrey,
+                textInputAction:TextInputAction.search,
               validator:(value){
                 if(value==null){
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content:selectedSBsBOption== sBOption.groupName? Text('Please enter group name'):selectedSBsBOption== sBOption.policyNo?Text('Please enter Policy No'):Text('Please enter policy holder name'),
                       duration: Duration(seconds: 2),
+                      behavior: SnackBarBehavior.floating,
                       backgroundColor: Colors.red,
                     ),
                   );
@@ -77,7 +95,7 @@ class _SBViewState extends State<SBView> {
                       maxWidth: 35
                   ),
                   suffixIcon: TextButton(
-                    child:  Icon(Icons.clear,
+                    child:  const Icon(Icons.clear,
                       color: Colors.blueGrey,
                       size: 20,
                     ) ,
@@ -126,39 +144,54 @@ class _SBViewState extends State<SBView> {
                   },
                 );              });
             },
-            child: const Icon(Icons.arrow_drop_down_circle_outlined,color: Color(0xffFDE0D9)),
+            style: ButtonStyle(
+                padding: MaterialStateProperty.all(EdgeInsets.zero)
+            ),
+            child: const Icon(
+
+                Icons.arrow_drop_down_circle_outlined,color: Color(0xffFDE0D9)),
           ),
           TextButton(
               onPressed: (){
                 setState(() {
                   isSearchPressed=!isSearchPressed;
                 });
-
-              }, child: const Icon(Icons.search,color: Color(0xffFDE0D9),))],
-        backgroundColor: Colors.blueGrey,
-        leading: const Center(
-          child: FittedBox(
-            fit: BoxFit.contain,
-            child: Text('SB Policies',
-              style: TextStyle(
-                  fontSize: 25,
-                  color: Color(0xffFDE0D9),
-                  decoration: TextDecoration.none,
-                  fontWeight: FontWeight.bold
+              },
+              style: ButtonStyle(
+                  padding: MaterialStateProperty.all(EdgeInsets.zero)
               ),
-              // textAlign: TextAlign.center,
-            ),
-          ),
-        ),
+              child: const Icon(Icons.search,color: Color(0xffFDE0D9),))],
+        backgroundColor: Colors.blueGrey,
+
 
       ),
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(bottom: 30.0,right: 10),
+          child: FloatingActionButton(
+            onPressed:
+                (){
+              print("SB FLOATING PRESED");
+              getSBData();
+            },
+            elevation: 20,
+            child: const Icon(Icons.refresh,color: Color(0xffFDE0D9)),
+
+          ),
+        ),
       body:Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(15.0),
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          child: GridView.builder(
-              itemCount:_data.length,
+          child: searchedData.length==0 && isSearchPressed==true?Center(child: Text("NO DATA EXIST",
+            style: TextStyle(
+              color: Colors.blueGrey,
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+            ),
+          ),)
+              :GridView.builder(
+              itemCount: isSearchPressed?searchedData.length:_data.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 8,
@@ -166,6 +199,7 @@ class _SBViewState extends State<SBView> {
               ),
               physics: const ClampingScrollPhysics(),
               itemBuilder: (context,index){
+                var sr_no=index+1;
                 final item = isSearchPressed?searchedData[index]: _data[index];
                 return
                   Container(
@@ -178,6 +212,18 @@ class _SBViewState extends State<SBView> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Container(
+                            margin: EdgeInsets.only(left: 10,bottom: 5),
+                            decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                shape: BoxShape.circle,
+                                border: Border.all(color: Colors.blueGrey)
+                            ),
+                            height: 20,
+                            width: 20,
+                            child: Center(child: FittedBox(fit:BoxFit.scaleDown,child:  Text(sr_no.toString(),),),),
+                            alignment: Alignment.centerRight,
+                          ),
                           ListTile(
                             trailing: RichText(text:
                             TextSpan(children: [
@@ -239,7 +285,7 @@ class _SBViewState extends State<SBView> {
                               onPressed: (){
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context)=>PolicyDetails(policyItem: item,)),
+                                  MaterialPageRoute(builder: (context)=>SBPolicyDetails(policyItem: item,)),
                                 );
                               },
                               child: const Text("View Details"),

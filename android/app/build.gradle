@@ -29,12 +29,12 @@ android {
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
-    compilesBOptions {
+    compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    kotlinsBOptions {
+    kotlinOptions {
         jvmTarget = '1.8'
     }
 

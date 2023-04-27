@@ -34,9 +34,9 @@ class _PolicyDetailsState extends State<PolicyDetails> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(top:8.0),
+          padding: const EdgeInsets.only(top:8.0,bottom: 8),
           child: Container(
-            height: MediaQuery.of(context).size.height,
+            // height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,6 +50,8 @@ class _PolicyDetailsState extends State<PolicyDetails> {
                       field(ctx: context,value: 'Policy No.', fieldStyle: fieldTextStyle()),
                       field(ctx: context,value: 'Member ID', fieldStyle: fieldTextStyle()),
                       field(ctx: context,value: 'Member Name', fieldStyle: fieldTextStyle()),
+                      field(ctx: context,value: 'Address', fieldStyle: fieldTextStyle()),
+                      field(ctx: context,value: 'DOB', fieldStyle: fieldTextStyle()),
                       field(ctx: context,value: 'Group ID', fieldStyle: fieldTextStyle()),
                       field(ctx: context,value: 'Group Name', fieldStyle: fieldTextStyle()),
                       field(
@@ -156,11 +158,13 @@ class _PolicyDetailsState extends State<PolicyDetails> {
                     ],
                   ),
                 ),
-                 const VerticalDivider(
-                  thickness: 2,
-                  width: 8,
-                  color: Color(0xffFDE0D9),
-                ),
+                 Container(
+                   width: 2,
+                   margin: EdgeInsets.only(left: 3,right: 3),
+                   height: MediaQuery.of(context).size.height,
+                   color:Color(0xffFDE0D9) ,
+                 ),
+
                 Expanded(
                   flex: 4,
                   child: Column(
@@ -182,6 +186,18 @@ class _PolicyDetailsState extends State<PolicyDetails> {
                       field(
                         ctx: context,
                         value: widget.policyItem['MembName'].toString(),
+                        fieldStyle: valueTextStyle(),
+                        // textAlign: TextAlign.center,
+                      ),
+                      field(
+                        ctx: context,
+                        value: widget.policyItem['AddressResi']==''?'-':widget.policyItem['AddressResi'].toString(),
+                        fieldStyle: valueTextStyle(),
+                        // textAlign: TextAlign.center,
+                      ),
+                      field(
+                        ctx: context,
+                        value:widget.policyItem['DOBActual']==''? widget.policyItem['DOBRec'].toString():widget.policyItem['DOBActual'],
                         fieldStyle: valueTextStyle(),
                         // textAlign: TextAlign.center,
                       ),
