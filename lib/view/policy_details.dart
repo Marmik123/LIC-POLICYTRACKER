@@ -197,7 +197,7 @@ class _PolicyDetailsState extends State<PolicyDetails> {
                       ),
                       field(
                         ctx: context,
-                        value:widget.policyItem['DOBActual']==''? widget.policyItem['DOBRec'].toString():widget.policyItem['DOBActual'],
+                        value:widget.policyItem['DOBActual']==''? widget.policyItem['DOBRec'].toString():widget.policyItem['DOBActual'].toString(),
                         fieldStyle: valueTextStyle(),
                         // textAlign: TextAlign.center,
                       ),

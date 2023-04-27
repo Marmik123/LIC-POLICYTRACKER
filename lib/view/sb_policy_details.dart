@@ -160,7 +160,7 @@ class _SBPolicyDetailsState extends State<SBPolicyDetails> {
                         // textAlign: TextAlign.center,
                       ),field(
                         ctx: context,
-                        value:widget.policyItem['DOBActual']==''? widget.policyItem['DOBRec'].toString():widget.policyItem['DOBActual'],
+                        value:widget.policyItem['DOBActual']==''? widget.policyItem['DOBRec'].toString():widget.policyItem['DOBActual'].toString(),
                         fieldStyle: valueTextStyle(),
                         // textAlign: TextAlign.center,
                       ),

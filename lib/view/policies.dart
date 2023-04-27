@@ -220,6 +220,9 @@ class _PoliciesState extends State<Policies> {
               physics: const ClampingScrollPhysics(),
               itemBuilder: (context,index){
                 var sr_no=index+1;
+                print(isSearchPressed);
+                print(index);
+
                 final item = isSearchPressed?searchedData[index]: _data[index];
                 return
                   Container(
