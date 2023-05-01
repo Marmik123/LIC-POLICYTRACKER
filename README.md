@@ -1,7 +1,7 @@
 POLICY TRACKER
   
   <img src="https://github.com/Marmik123/LIC-POLICYTRACKER/blob/marmik/assets/policy_tracker.png" width="128"/>
-  
+  This logo is made by me using an amazing AI tool called "Looka". Added the link at the end. 
 
 I developed this app using FLUTTER for my uncle who is working as an LIC Policy Advisor for 15 years. Since, he is working in LIC for such a long time he have a large number of policies and client data associated with him. He was maitaining the clients and their policies details inside the VM PRO software in his PC.
 
@@ -21,3 +21,5 @@ Flutter packages used :
 1) sqflite - https://pub.dev/packages/sqflite
 2) flutter_launch_icons - https://pub.dev/packages/flutter_launcher_icons
 3) flutter_native_splash- https://pub.dev/packages?q=flutter+native+splash
+
+Looka is an AI-powered graphic design platform : https://looka.com/
